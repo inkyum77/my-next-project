@@ -32,15 +32,13 @@ function ReservationHistory() {
 
   return (
     <div>
-      <Typography 
-        variant=" " 
-        sx={{
-          textAlign:'left',
-          padding:'20px'
-        }} 
-        gutterBottom>
-        예약/이용 내역
-      </Typography>
+    <Typography sx={{
+      fontSize : "30px",
+      ml:"15px",
+      textAlign: "center",
+    }}>
+      예약/이용 내역  
+    </Typography>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="예약/이용 내역 표">
@@ -54,6 +52,24 @@ function ReservationHistory() {
             </TableRow>
           </TableHead>
           <TableBody>
+            {reservationData.map((row, index) => (
+
+
+              <TableRow key={index}>
+                <TableCell component="th" scope="row">
+                  {row.campground}
+                </TableCell>
+                <TableCell align="left">{row.period}</TableCell>
+                <TableCell align="left">{row.price}</TableCell>
+                <TableCell align="left">{row.status}</TableCell>
+                <TableCell align="center">
+                  {
+                    row.status == "이용완료" ? <Button variant='contained'>후기작성</Button> : ""
+                  }
+
+                </TableCell>
+              </TableRow>
+            ))}
             {reservationData.map((row, index) => (
 
 
@@ -90,4 +106,4 @@ export default ReservationHistory;
                     >
                       후기쓰기
                     </Button>
-                  )} */}
+                  )} */} 

@@ -16,7 +16,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CallIcon from "@mui/icons-material/Call";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import { Image as ImageIcon } from "@mui/icons-material";
+import { Close, Image as ImageIcon } from "@mui/icons-material";
 import {
   SportsSoccer,
   Wifi,
@@ -30,7 +30,7 @@ import HikingIcon from "@mui/icons-material/Hiking";
 import { useRouter } from "next/navigation";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { fetchCampgrounds } from "./CampGround";
-import { Avatar, Box, Pagination, Stack } from "@mui/material";
+import { Avatar, Box, Button, IconButton, Pagination, Stack, SvgIcon, TextField, Typography } from "@mui/material";
 import './styles.css'
 
 function CampgroundSearchPage() {
@@ -109,6 +109,13 @@ function CampgroundSearchPage() {
 
   return (
     <>
+    <Typography sx={{
+      fontSize : "30px",
+      ml:"15px",
+      textAlign: "center",
+    }}>
+      내가 찜한 캠핑장
+    </Typography>
       {/* Search Bar Section */}
       <div
         style={{
@@ -507,6 +514,11 @@ function CampgroundSearchPage() {
                       })}
                   </div>
                 </div>
+                <Button>
+                    <SvgIcon>
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </SvgIcon>
+                </Button>
               </div>
             </Box>
           ))
