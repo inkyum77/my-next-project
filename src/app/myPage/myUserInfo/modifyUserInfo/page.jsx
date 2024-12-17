@@ -6,7 +6,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import styles from "./Authentication.module.css";
-import InputForm from "@/app/components/InputForm";
+import InputForm from "../../../components/InputForm";
 
 function SignupPage() {
   const [mId, setMId] = useState("");

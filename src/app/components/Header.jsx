@@ -162,7 +162,7 @@ const Header = () => {
                   Together
                 </Link>
                 <Link
-                  href="/"
+                  href="/myPage/myUserInfo"
                   className="appbar-link"
                   style={{
                     textDecoration: "none",

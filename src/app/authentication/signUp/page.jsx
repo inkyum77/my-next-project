@@ -4,10 +4,8 @@ import { Button, Box, Typography, Checkbox, FormControlLabel, List, ListItem, Li
 import { useRouter } from "next/navigation";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import axios from "axios";
 import styles from "../Authentication.module.css";
 import InputForm from "../../components/InputForm";
-import FormSwitcher from "./components/FormSwitcher";
 import useEmailVerification from "./hooks/useEmailVerification";
 import useSignup from "./hooks/useSignUP";
 import useBussinessNumberCheck from "./hooks/useBussinessNumberCheck";
@@ -27,9 +25,6 @@ function SignupPage() {
     error,
     countdown,
   } = useEmailVerification();
-  
-
-
 
   const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
 
