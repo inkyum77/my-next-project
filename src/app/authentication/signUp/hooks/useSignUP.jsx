@@ -85,9 +85,6 @@ const useSignup = (LOCAL_API_BASE_URL) => {
 
 
 
-
-
-
   return {
     mId, mPw, mPwConfirm, name, phone, email, emailVerified, verificationCode,
     zipcode, address, addressDetail, error, agreed, verificationSent, idStatus, passwordCheck, 

@@ -9,6 +9,9 @@ const useEmailVerification = () => {
   const [error, setError] = useState("");
   const [countdown, setCountdown] = useState(180); // 3분 (180초)
 
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handleVerificationCodeChange = (e) => setVerificationCode(e.target.value);
+
   const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
 
   //이메일 인증 타이머
@@ -88,16 +91,15 @@ const useEmailVerification = () => {
 
   return {
     email,
-    setEmail,
     verificationCode,
-    setVerificationCode,
     verificationSent,
-    sendVerificationCode,
     emailVerified,
-    verifyCode,
     error,
-    countdown, 
-    setCountdown
+    countdown,
+    handleEmailChange,
+    handleVerificationCodeChange,
+    verifyCode,
+    sendVerificationCode,
   };
 };
 

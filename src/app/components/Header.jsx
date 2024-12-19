@@ -61,7 +61,7 @@ const Header = () => {
             </Box>
 
             <Box className="toolbar-right">
-              <Link href="/myPage" underline="none">
+              <Link href="/myPage/myUserInfo" underline="none">
                 <PersonIcon className="icon" />
               </Link>
               <Link href="/" underline="none">

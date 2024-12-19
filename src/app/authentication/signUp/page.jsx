@@ -9,33 +9,45 @@ import InputForm from "../../components/InputForm";
 import useEmailVerification from "./hooks/useEmailVerification";
 import useSignup from "./hooks/useSignUP";
 import useBussinessNumberCheck from "./hooks/useBussinessNumberCheck";
+import usePhoneVerification from "./hooks/usePhoneVerification";
+import api from "../../../../services/axios";
 
 function SignupPage() {
+  const router = useRouter();
+
+  const {
+    phone,
+    otp,
+    phoneVerified,
+    otpSended,
+    handlePhoneChange,
+    handleOtpChange,
+    sendOtp,
+    verifyOtp
+  } = usePhoneVerification();
 
   // 이메일 커스텀 훅
   const {
     email,
-    setEmail,
     verificationCode,
-    setVerificationCode,
     verificationSent,
-    sendVerificationCode,
     emailVerified,
-    verifyCode,
-    error,
     countdown,
+    error,
+    handleVerificationCodeChange,
+    handleEmailChange,
+    verifyCode,
+    sendVerificationCode,
   } = useEmailVerification();
 
   const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
 
   const {
-    mId, mPw, mPwConfirm, name, phone,
+    mId, mPw, mPwConfirm, name, 
     zipcode, address, addressDetail, agreed, idStatus, passwordCheck,
-    handleIdChange, handlePwChange, handleMPwConfirmChange, handleNameChange, handlePhoneChange,
-    handleEmailChange,
-    handleAgreeChange, handleVerificationCodeChange, 
-    handleZipcodeChange, handleAddressChange, handleAddressDetailChange,  //주소
-    setError, setVerificationSent, setEmailVerified, setIdStatus, setPasswordCheck, handlePostCode
+    handleIdChange, handlePwChange, handleMPwConfirmChange, handleNameChange,
+    handleAgreeChange, handleZipcodeChange, handleAddressChange, handleAddressDetailChange,  //주소
+    setError, handlePostCode
   } = useSignup(LOCAL_API_BASE_URL);
   
   // 사업자 등록번호 조회 훅
@@ -73,35 +85,64 @@ function SignupPage() {
     };
   }, []);
 
+  const handleSubmit = async (e) => {
+    
+    e.preventDefault();
 
-  // 회원가입 버튼 클릭 처리
-  const handleSignup = () => {
     if (!mId || !mPw || !mPwConfirm || !name || !phone || !email || !zipcode || !address || !addressDetail) {
-      setError("모든 필드를 입력하세요.");
+      alert("모든 필드를 입력하세요.");
       return;
     }
     if(!idStatus){
-      setError("이미 사용중인 아이디입니다.");
+      alert("이미 사용중인 아이디입니다.");
     }
     if (mPw !== mPwConfirm) {
-      setError("비밀번호가 일치하지 않습니다.");
+      alert("비밀번호가 일치하지 않습니다.");
       return;
     }
     if (!emailVerified) {
-      setError("이메일 인증을 완료해주세요.");
+      alert("이메일 인증을 완료해주세요.");
       return;
     }
-    if (!agreed) {
+    if (!alert) {
       setError("약관에 동의해야 회원가입이 가능합니다.");
       return;
     }
 
-    // 회원가입 로직 추가 (예: 서버에 데이터 전송)
-    console.log("회원가입 성공:", { mId, mPw, name, phone, email, zipcode, address, addressDetail });
+    
+      const memberData = {
+        m_id: mId,
+        m_name: name,
+        m_pw: mPw,
+        email: email,
+        phone: phone,
+        zipcode: zipcode,
+        address: address,
+        address_detail: addressDetail,
+        business_number: businessNumber,
+        business_ceo: ceoName,
+        started_date: startedDate
+    };
 
-    // 회원가입 성공 후 로그인 페이지로 이동
-    router.push("/login");
+
+    try {
+      const response = await api.post('/api/members/join', memberData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(response);
+      if(response.data.success){
+        console.log(response.data);
+        router.push('/');
+      }
+    } catch (error) {
+      alert('회원가입 실패' + error);
+    }   
   };
+
+
+
 
   return (
     <div className="authenticationBox">
@@ -116,9 +157,9 @@ function SignupPage() {
         }}
       >
         <Grid item xs={12} md={12} lg={12} xl={12}>
+          <form onSubmit={handleSubmit}>
           <Box>
-
-                  {/* 선택된 폼 */}
+              {/* 선택된 폼 */}
               <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
                 <Button
                   variant={selectedForm === 'form1' ? 'contained' : 'outlined'}
@@ -284,16 +325,37 @@ function SignupPage() {
                     value={phone}
                     onChange={handlePhoneChange}
                     xs={12}
+                    disabled={phoneVerified}
                   />
-                    {/* <Button
-                      xs={4}
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      onClick={() => setPhoneVerified(true)}
-                    >
-                      휴대폰 인증하기
-                    </Button> */}
+                  <Button
+                    xs={4}
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    onClick={sendOtp}
+                    disabled={phoneVerified}
+                  >
+                    휴대폰 인증하기
+                  </Button> 
+                  <InputForm
+                    label="인증번호"
+                    name="otp"
+                    value={otp}
+                    onChange={handleOtpChange}
+                    //otp 발송 전과 인증 후에 disabled
+                    disabled={!otpSended || phoneVerified}
+                    xs={12}
+                  />
+                  <Button
+                    xs={4}
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    disabled={!otpSended || phoneVerified}
+                    onClick={verifyOtp}
+                  >
+                    확인
+                  </Button> 
                 </Grid>
               </Box>
               <Box
@@ -314,7 +376,6 @@ function SignupPage() {
                     disabled={emailVerified}
                   />
                   <Button
-                    type="submit"
                     fullWidth
                     variant="contained"
                     sx={{
@@ -449,7 +510,7 @@ function SignupPage() {
               <Typography variant="subtitle1">약관</Typography>
               <List>
                 {/* 약관 1 */}
-                <ListItem button onClick={() => toggleTerm("term1")}>
+                <ListItem onClick={() => toggleTerm("term1")}>
                   <ListItemText primary="이용약관" />
                   {openTerms.term1 ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
@@ -462,7 +523,7 @@ function SignupPage() {
                 </Collapse> 
 
                 {/* 약관 2 */}
-                <ListItem button onClick={() => toggleTerm("term2")}>
+                <ListItem onClick={() => toggleTerm("term2")}>
                   <ListItemText primary="개인정보 처리방침" />
                   {openTerms.term2 ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
@@ -492,6 +553,7 @@ function SignupPage() {
 
             {/* 회원가입 버튼 */}
             <Button
+              type="submit"
               variant="contained"
               color="primary"
               fullWidth
@@ -514,6 +576,7 @@ function SignupPage() {
             </Button>
           </Box>
         </Box>
+        </form>
       </Grid>
     </Box>
   </div>

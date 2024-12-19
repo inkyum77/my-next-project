@@ -3,6 +3,6 @@ import MyUserInfo from "./myPage/myUserInfo/page";
 
 export default function Home() {
   return (
-    <MyUserInfo/>
+    <h1>메인 페이지</h1>
   );
 }
