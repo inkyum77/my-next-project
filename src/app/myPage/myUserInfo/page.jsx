@@ -13,7 +13,20 @@ function MyUserInfo(props) {
     email : ""
   });
   const router = useRouter();
+
+  const initialize = useAuthStore((state) => state.initialize);
   
+  useEffect(() => {
+    const token = Cookies.get('token');
+    const user = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
+
+    //zustand에 토큰과 사용자 정보가 있으면 초기화, 아니면 경고창 
+    if (token && user) {
+      initialize({ user, token });
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  }, [initialize]);
   // 토큰 가져오기
   const token = useAuthStore((state) => state.token);  // zustand에서 token 값 가져오기
 
@@ -41,14 +54,14 @@ function MyUserInfo(props) {
       
       if(response.data.success){
         setUserProfile(response.data.data);
-        alert(response.data.message);
+        // alert(response.data.message);
       } else{
-        alert(response.data.message);
+        // alert(response.data.message);
       }
 
     } catch (error) {
       console.error(error);
-      alert("불러오기에 실패하였습니다.");
+      // alert("불러오기에 실패하였습니다.");
     }
   }
 
@@ -61,8 +74,15 @@ function MyUserInfo(props) {
   }, [token]);
 
   const handleModifyClick = () => {
-    router.push("/myPage/myUserInfo/passwordCheck");  // 회원가입 페이지로 이동
+    router.push("/myPage/myUserInfo/passwordCheck?action=update");  // 수정 페이지로 이동
   };
+  const handleDeleteClick = () => {
+    router.push("/myPage/myUserInfo/passwordCheck?action=delete");
+  }
+
+  const displayEmail = userProfile.email || userProfile.sns_email_kakao || userProfile.sns_email_naver || userProfile.sns_email_google;
+
+
   return (
     <Container maxWidth="sm"
         sx={{
@@ -82,7 +102,7 @@ function MyUserInfo(props) {
       <Box sx={{ marginBottom: 2 }}>
         {/* 이름 */}
         <Typography variant="h5" gutterBottom>
-          {userProfile.name}
+          {userProfile.m_name}
         </Typography>
         {/* 닉네임 */}
         <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -90,7 +110,7 @@ function MyUserInfo(props) {
         </Typography>
         {/* 아이디 */}
         <Typography variant="body1" color="textSecondary" gutterBottom>
-          {userProfile.email}
+          {displayEmail ? displayEmail : "이메일 정보 없음"}
         </Typography>
       </Box>
 
@@ -100,7 +120,7 @@ function MyUserInfo(props) {
           회원정보 수정
         </Button>
         {/* 회원 탈퇴하기 버튼 */}
-        <Button variant="outlined" color="error" fullWidth >
+        <Button variant="outlined" color="error" fullWidth onClick={handleDeleteClick}>
           회원 탈퇴하기
         </Button>
       </Box>

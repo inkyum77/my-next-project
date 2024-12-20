@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 
 function page(props) {
-  const { isAuthenticated, login, logout } = useAuthStore();
+  const { login } = useAuthStore();
   const router = useRouter();
 
 

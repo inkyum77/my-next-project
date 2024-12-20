@@ -27,11 +27,21 @@ const SignInForm = () => {
 
   const { login } = useAuthStore(); // zustand login 함수 가져오기 
 
+  const initialize = useAuthStore((state) => state.initialize);
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const logout = useAuthStore((state) => state.logout);
+
   // 텍스트필드 초기화
   const initMvo = {
     m_id: "",
     m_pw: ""
   }
+
+  // 앱 초기화 시 쿠키에서 정보 가져오기
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
 
   //사용자 정보
   const [mvo, setMvo] = useState(initMvo);
