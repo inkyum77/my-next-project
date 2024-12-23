@@ -18,10 +18,6 @@ function page(props) {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  function handleConfirmBtnClick(){
-    router.push('/myPage/myUserInfo/modifyUserInfo');
-  }
-
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   }

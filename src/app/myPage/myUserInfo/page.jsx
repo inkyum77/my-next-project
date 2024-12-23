@@ -7,11 +7,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'; // 쿠키 관리 라이브러리 사용
 
 function MyUserInfo(props) {
-  const [userProfile, setUserProfile] = useState({
-    name : "",
-    m_id : "",
-    email : ""
-  });
+  const [userProfile, setUserProfile] = useState({});
   const router = useRouter();
 
   const initialize = useAuthStore((state) => state.initialize);
@@ -44,7 +40,7 @@ function MyUserInfo(props) {
   const getProfile = async () => {
 
     try {
-      const API_URL = `${LOCAL_API_BASE_URL}/members/profile`;
+      const API_URL = `${LOCAL_API_BASE_URL}/users/profile`;
       const response = await axios.get(API_URL, {
         headers: {
           Authorization: `Bearer ${token}`  // JWT 토큰을 Authorization header에 담아서 전송
@@ -102,11 +98,11 @@ function MyUserInfo(props) {
       <Box sx={{ marginBottom: 2 }}>
         {/* 이름 */}
         <Typography variant="h5" gutterBottom>
-          {userProfile.m_name}
+          {userProfile.username}
         </Typography>
         {/* 닉네임 */}
         <Typography variant="h6" color="textSecondary" gutterBottom>
-          {userProfile.m_id}
+          {userProfile.id}
         </Typography>
         {/* 아이디 */}
         <Typography variant="body1" color="textSecondary" gutterBottom>
