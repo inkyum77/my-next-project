@@ -38,6 +38,7 @@ const useAuthStore = create(
       removeToken: () => {
         set({ token: '' });
         Cookies.remove('token'); // 쿠키에서 토큰 제거
+        Cookies.remove('user'); // 쿠키에서 유저 정보 제거
       },
 
       // 로그인 처리

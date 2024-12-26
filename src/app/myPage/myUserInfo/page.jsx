@@ -50,14 +50,12 @@ function MyUserInfo(props) {
       
       if(response.data.success){
         setUserProfile(response.data.data);
-        // alert(response.data.message);
-      } else{
-        // alert(response.data.message);
       }
 
     } catch (error) {
       console.error(error);
-      // alert("불러오기에 실패하였습니다.");
+      alert("로그인해주세요.");
+      router.push('/');
     }
   }
 

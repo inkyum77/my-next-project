@@ -71,6 +71,13 @@ const SignInForm = () => {
   }
 
   function goServer() {
+    const searchParams = new URLSearchParams(window.location.search);
+    // 어떤 경로로 로그인 페이지에 왔는가?
+    let from = searchParams.get('from');
+    // 경로가 없으면 메인페이지로
+    if(from == null){
+      from = "/";
+    }
     const API_URL = `${LOCAL_API_BASE_URL}/users/login`;
     console.log(mvo);
     
@@ -82,7 +89,8 @@ const SignInForm = () => {
       if (data.success) {
         alert(data.message);
         login(data.data, data.token);
-        router.push('/');
+        // 원래 가고자 했던 경로로 넘어간다.
+        router.push(`/${from}`);
       } else {
         alert(data.message);
         setMvo(initMvo);
@@ -173,6 +181,7 @@ const SignInForm = () => {
                   />
                   <InputForm
                     label="비밀번호"
+                    type="password"
                     name='password'
                     value={mvo.password}
                     onChange={changeMvo}
@@ -201,7 +210,6 @@ const SignInForm = () => {
               </Grid>
 
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 sx={{

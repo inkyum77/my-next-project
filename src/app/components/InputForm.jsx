@@ -3,7 +3,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-function InputForm({label, type="text", name, value, onChange, xs=12, disabled=false, placeholder="", maxLength}) {
+function InputForm({label="", type="text", name="", value="", onChange="", xs=12, disabled=false, placeholder="", maxLength=15}) {
   const [showPassword, setShowPassword] = useState(false);
 
   // 비밀번호 표시 상태 변경 함수

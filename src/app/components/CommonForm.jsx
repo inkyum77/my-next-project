@@ -8,7 +8,9 @@ import InputForm from './InputForm';
 import api from "../../../services/axios";
 import { useRouter } from 'next/navigation';
 import AgreementForm from './AgreementForm';
+import EmailVerificationForm from './EmailVerificaionForm';
 
+//agreement 는 이용약관
 function CommonForm({agreement}, type) {
 
   const router = useRouter();
@@ -24,18 +26,7 @@ function CommonForm({agreement}, type) {
     verifyOtp
   } = usePhoneVerification();
     // 이메일 커스텀 훅
-    const {
-      email,
-      verificationCode,
-      verificationSent,
-      emailVerified,
-      countdown,
-      error,
-      handleVerificationCodeChange,
-      handleEmailChange,
-      verifyCode,
-      sendVerificationCode,
-    } = useEmailVerification();
+    const emailVerificaion = useEmailVerification();
   
     const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
   
@@ -44,7 +35,7 @@ function CommonForm({agreement}, type) {
       zipcode, address, addressDetail, agreed, idStatus, passwordCheck,
       handleIdChange, handlePasswordChange, handlePasswordConfirmChange, handleUsernameChange,
       handleAgreeChange, handleZipcodeChange, handleAddressChange, handleAddressDetailChange,  //주소
-      setError, handlePostCode,
+      handlePostCode,
       setUserType, userType
     } = useSignup(LOCAL_API_BASE_URL);
 
@@ -375,6 +366,9 @@ function CommonForm({agreement}, type) {
                 fullWidth
                 onClick={sendOtp}
                 disabled={phoneVerified}
+                sx={{
+                  ml:'16px'
+                }}
               >
                 휴대폰 인증하기
               </Button> 
@@ -394,85 +388,16 @@ function CommonForm({agreement}, type) {
                 fullWidth
                 disabled={!otpSended || phoneVerified}
                 onClick={verifyOtp}
+                sx={{
+                  ml:'16px'
+                }}
               >
                 확인
-              </Button> 
+              </Button>
             </Grid>
           </Box>
-          <Box
-            sx={{
-              background: "#fff",
-              padding: "30px 20px",
-              borderRadius: "10px",
-              mb: "20px",
-            }}
-            className="bg-black"
-          >
-            <Grid container alignItems="center" spacing={2}>
-              <InputForm
-                label="이메일"
-                name="email"
-                value={email}
-                onChange={handleEmailChange}
-                disabled={emailVerified}
-              />
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  mb: 2,
-                  textTransform: "capitalize",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  fontSize: "16px",
-                  ml:"20px",
-                  mr:"2px",
-                  padding: "10px 10px",
-                  color: "#fff !important",
-                }}
-                onClick={sendVerificationCode}
-                disabled={emailVerified}
-              >
-              인증번호 보내기
-              </Button>
-              <InputForm
-                label="인증 코드"
-                name="verificationCode"
-                value={verificationCode}
-                onChange={handleVerificationCodeChange}
-              />
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  mb: 2,
-                  textTransform: "capitalize",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  fontSize: "16px",
-                  ml:"20px",
-                  mr:"2px",
-                  padding: "10px 10px",
-                  color: "#fff !important",
-                }}
-                onClick={verifyCode}
-                disabled={emailVerified}
-              >
-                인증번호 확인
-              </Button>
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 3, ml: 3 }}>
-                {emailVerified
-                  ? '인증 완료되었습니다.'
-                  : verificationSent
-                  ? `인증 코드가 이메일로 발송되었습니다. 남은 시간: ${Math.floor(countdown / 60)}:${countdown % 60}`
-                  : null}
-              </Typography>
-            
-            </Grid>
-          
-          </Box>            
+          <EmailVerificationForm {...emailVerificaion}/>
+
           <Box
             sx={{
               background: "#fff",
@@ -529,13 +454,6 @@ function CommonForm({agreement}, type) {
         {
           agreement ? <AgreementForm agreed={agreed} handleAgreeChange={handleAgreeChange}/> : ""
         }
-
-        {/* 에러 메시지 */}
-        {error && (
-          <Typography color="error" sx={{ marginTop: 2 }}>
-            {error}
-          </Typography>
-        )}
 
         {/* 회원가입 버튼 */}
         <Button

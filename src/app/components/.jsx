@@ -8,13 +8,19 @@ import InputForm from './InputForm';
 import usePhoneVerification from '../authentication/signUp/hooks/usePhoneVerification';
 import LockIcon from '@mui/icons-material/Lock';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { useRouter } from 'next/navigation';
 
 function CommonUserForm(props) {
   const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
+  const router = useRouter();
+
+  const changePassword = () => {
+    router.push(`/updateUserInfo/changePassword`);
+  }
 
   return (
       <Box
-        component="main"  
+        component="main"
         sx={{
           maxWidth: "510px",
           ml: "auto",
@@ -36,10 +42,14 @@ function CommonUserForm(props) {
                   minWidth: '500px'
                 }}
               >
-                <Box sx={{
-                  display:'flex',
-                  justifyContent: "space-between"
-                }}>
+                <Box 
+                  sx={{
+                    display:'flex',
+                    justifyContent: "space-between",
+                    alignItems: 'center'
+                  }}
+                  onClick={changePassword}
+                >
                   <Typography
                     sx={{
                       fontSize: "20px",
@@ -48,14 +58,14 @@ function CommonUserForm(props) {
                     <LockIcon
                       sx={{
                         fontSize: '20px',
-
+                        mr:'10px'
                       }}
                     />
                     비밀번호 변경
                   </Typography>
                   <KeyboardArrowRightIcon 
                     sx={{
-                      
+                      fontSize: '20px'
                     }}
                   />
                   <></>

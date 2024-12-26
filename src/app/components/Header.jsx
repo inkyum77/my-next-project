@@ -10,6 +10,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button,
+  Typography,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
@@ -26,15 +28,34 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useMediaQuery } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import "./styles.css";
+import useAuthStore from "../../../store/authStore";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const {isAuthenticated, removeToken, logout} = useAuthStore();
   const theme = createTheme(); // 테마 생성
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const router = useRouter();
 
   // 테마를 사용하여 미디어 쿼리
   const isSmallScreen = useMediaQuery("(max-width: 900px)");
 
   const toggleDrawer = (open) => () => setIsDrawerOpen(open);
+
+  const goMyPage = () => {
+    if(!isAuthenticated){
+      alert("로그인이 필요합니다.");
+      router.push('/authentication/login?from=myPage/myUserInfo');
+      return;
+    }
+    router.push('/myPage/myUserInfo');
+  }
+
+  const logoutEvent = () => {
+    removeToken();
+    logout();
+    router.push('/');
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -61,9 +82,9 @@ const Header = () => {
             </Box>
 
             <Box className="toolbar-right">
-              <Link href="/myPage/myUserInfo" underline="none">
+              <Typography sx={{cursor:'pointer'}} underline="none" onClick={goMyPage}>
                 <PersonIcon className="icon" />
-              </Link>
+              </Typography>
               <Link href="/" underline="none">
                 <AssignmentTurnedInIcon className="icon" />
               </Link>
@@ -97,6 +118,7 @@ const Header = () => {
               </IconButton>
             ) : (
               <Box className="appbar-left-menu">
+                {!isAuthenticated ? <>
                 <Link
                   href="/authentication/signUp"
                   className="appbar-link"
@@ -116,9 +138,22 @@ const Header = () => {
                     color: "black",
                     fontSize: "18px",
                   }}
-                >
+                  >
                   Login
-                </Link>
+                </Link></> :
+                <Typography
+                  onClick={logoutEvent}
+                  className="appbar-link"
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                    fontSize: "18px",
+                    cursor: 'pointer'
+                  }}
+                >
+                  Logout
+                </Typography>
+                }
                 <Link
                   href="/"
                   className="appbar-link"
@@ -195,7 +230,6 @@ const Header = () => {
             </div>
             <List>
               <ListItem
-                button
                 component="a"
                 href="/admin/campgrounds/search"
                 className="drawer-list-item"
@@ -207,7 +241,6 @@ const Header = () => {
                 />
               </ListItem>
               <ListItem
-                button
                 component="a"
                 href="/"
                 className="drawer-list-item"
@@ -216,7 +249,6 @@ const Header = () => {
                 <ListItemText primary="Together" className="drawer-item-text" />
               </ListItem>
               <ListItem
-                button
                 component="a"
                 href="/"
                 className="drawer-list-item"
@@ -228,7 +260,6 @@ const Header = () => {
                 />
               </ListItem>
               <ListItem
-                button
                 component="a"
                 href="/"
                 className="drawer-list-item"
@@ -237,7 +268,6 @@ const Header = () => {
                 <ListItemText primary="Sign in" className="drawer-item-text" />
               </ListItem>
               <ListItem
-                button
                 component="a"
                 href="/"
                 className="drawer-list-item"
@@ -246,7 +276,6 @@ const Header = () => {
                 <ListItemText primary="Login" className="drawer-item-text" />
               </ListItem>
               <ListItem
-                button
                 component="a"
                 href="/"
                 className="drawer-list-item"
