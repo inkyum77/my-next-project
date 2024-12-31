@@ -5,12 +5,15 @@ import React, { useEffect, useState } from 'react';
 import useAuthStore from '../../../../store/authStore';
 import axios from 'axios';
 import Cookies from 'js-cookie'; // 쿠키 관리 라이브러리 사용
+import useApi from '../../components/useApi';
 
 function MyUserInfo(props) {
   const [userProfile, setUserProfile] = useState({});
   const router = useRouter();
+  const {isAuthenticated, setIsAuthenticated, initialize} = useAuthStore();
+  const token = useAuthStore((state) => state.token);  // zustand에서 token 값 가져오기
+  const {getData, postData} = useApi(token, setUserProfile);
 
-  const initialize = useAuthStore((state) => state.initialize);
   
   useEffect(() => {
     const token = Cookies.get('token');
@@ -21,49 +24,47 @@ function MyUserInfo(props) {
       initialize({ user, token });
     } else {
       alert("로그인이 필요합니다.");
+
     }
   }, [initialize]);
   // 토큰 가져오기
-  const token = useAuthStore((state) => state.token);  // zustand에서 token 값 가져오기
 
   const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
 
-  // 회원 정보 (예시)
-  // const userInfo = {
-  //   name: '홍길동',
-  //   nickname: '길동이',
-  //   userId: 'honggildong123',
-  //   profileImage: 'https://www.example.com/profile.jpg' // 프로필 이미지 URL
-  // };
+  // const getProfile = async () => {
 
-
-  const getProfile = async () => {
-
-    try {
-      const API_URL = `${LOCAL_API_BASE_URL}/users/profile`;
-      const response = await axios.get(API_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`  // JWT 토큰을 Authorization header에 담아서 전송
-        }
-      });
-      console.log(response);
+  //   try {
+  //     const API_URL = `${LOCAL_API_BASE_URL}/users/profile`;
+  //     const response = await axios.get(API_URL, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`  // JWT 토큰을 Authorization header에 담아서 전송
+  //       }
+  //     });
+  //     console.log(response);
       
-      if(response.data.success){
-        setUserProfile(response.data.data);
-      }
+  //     if(response.data.success){
+  //       setUserProfile(response.data.data);
+  //     }
 
-    } catch (error) {
-      console.error(error);
-      alert("로그인해주세요.");
-      router.push('/');
-    }
-  }
-
-
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("로그인해주세요.");
+  //     setIsAuthenticated(false);
+  //     router.push('/');
+  //   }
+  // }
 
   useEffect(() => {
     if (token) {
-      getProfile();  // token이 있으면 getProfile 호출
+      getData(
+        "/users/profile",           // url
+        {},                         // 매개변수
+        ()=>{} ,                    // 성공 시 메서드
+        () => {                     // 실패 시 메서드
+          alert("로그인해주세요.");
+          setIsAuthenticated(false);
+          router.push('/');
+      })
     }
   }, [token]);
 

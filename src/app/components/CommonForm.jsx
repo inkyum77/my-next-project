@@ -128,7 +128,7 @@ function CommonForm({agreement}, type) {
           }
         } catch (error) {
           alert('회원가입 실패' + error);
-        }   
+        }
 
         return;
       }
@@ -166,7 +166,7 @@ function CommonForm({agreement}, type) {
         }
       } catch (error) {
         alert('회원가입 실패' + error);
-      }   
+      }
     };
 
 
@@ -209,7 +209,7 @@ function CommonForm({agreement}, type) {
               }}
               sx={{ margin: '0 10px' }}
             >
-              사업자 가입자 
+              사업자 가입자
             </Button>
           </Box>
           <Box>

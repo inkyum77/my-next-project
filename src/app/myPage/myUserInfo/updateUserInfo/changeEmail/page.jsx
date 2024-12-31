@@ -1,12 +1,14 @@
 "use client"
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import React from 'react'
 import EmailVerificationForm from '../../../../components/EmailVerificaionForm'
 import useEmailVerification from '../../../../authentication/signUp/hooks/useEmailVerification'
 
 export default function ChangePassword() {
-
+    const LOCAL_API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL;
     const emailVerificaion = useEmailVerification();
+    const emailVerfied = useEmailVerification();
+
 
     // 비밀번호 변경 요청
     const submitEvent = async () => {
@@ -37,6 +39,12 @@ export default function ChangePassword() {
             alignContent: 'center'
         }}>
             <EmailVerificationForm {...emailVerificaion}/>
+            <Button
+                variant='contained'
+                disabled={!emailVerfied}
+            >
+                변경하기
+            </Button>
         </Box>
     )
 }

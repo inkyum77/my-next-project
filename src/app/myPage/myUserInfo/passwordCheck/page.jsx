@@ -18,6 +18,14 @@ function page(props) {
   const searchParams = useSearchParams();  // 쿼리 파라미터 접근
   const action = searchParams.get('action');  // action 값 가져오기
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      // e.preventDefault(); // 기본 Enter 동작 막기 (필요시)
+      passwordCheck();
+      console.log("keydown");
+    }
+  };
+
 
   //서버에 요청한다.
   const passwordCheck = async () => {
@@ -93,6 +101,7 @@ function page(props) {
         name="password"
         value={password}
         onChange={handlePasswordChange}
+        onKeyDown={handleKeyDown}
       />
       <Button
         fullWidth

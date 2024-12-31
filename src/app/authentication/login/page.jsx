@@ -103,13 +103,21 @@ const SignInForm = () => {
     router.push("/signUp");  // 회원가입 페이지로 이동
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get("email"),
+  //     password: data.get("password"),
+  //   });
+  // };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      // e.preventDefault(); // 기본 Enter 동작 막기 (필요시)
+      goServer();
+      console.log("keydown");
+    }
   };
 
 
@@ -161,30 +169,24 @@ const SignInForm = () => {
               <span>or</span>
             </div>
 
-            <Box component="form" noValidate onSubmit={handleSubmit}>
+            <Box component="form" noValidate>
               <Box
-                sx={{
-                  background: "#fff",
-                  padding: "30px 20px",
-                  borderRadius: "10px",
-                  mb: "20px"
-                }}
+                sx={{background: "#fff", padding: "30px 20px", borderRadius: "10px", mb: "20px"}}
                 className="bg-black"
               >
                 <Grid container alignItems="center" spacing={2}>
 
                   <InputForm
-                    label="아이디"
-                    name='id'
+                    label="아이디" name='id'
                     value={mvo.id}
                     onChange={changeMvo}
+                    onKeyDown={handleKeyDown}
                   />
                   <InputForm
-                    label="비밀번호"
-                    type="password"
-                    name='password'
+                    label="비밀번호" type="password" name='password'
                     value={mvo.password}
                     onChange={changeMvo}
+                    onKeyDown={handleKeyDown}
                   />
                 </Grid>
               </Box>
@@ -212,15 +214,7 @@ const SignInForm = () => {
               <Button
                 fullWidth
                 variant="contained"
-                sx={{
-                  mt: 2,
-                  textTransform: "capitalize",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  fontSize: "16px",
-                  padding: "12px 10px",
-                  color: "#fff !important",
-                }}
+                sx={{ mt: 2, textTransform: "capitalize", borderRadius: "8px", fontWeight: "500", fontSize: "16px", padding: "12px 10px", color: "#fff !important"}}
                 onClick={goServer}
               >
                 Sign In
