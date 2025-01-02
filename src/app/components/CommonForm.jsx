@@ -8,23 +8,16 @@ import InputForm from './InputForm';
 import api from "../../../services/axios";
 import { useRouter } from 'next/navigation';
 import AgreementForm from './AgreementForm';
-import EmailVerificationForm from './EmailVerificaionForm';
+import EmailVerificationForm from '../authentication/signUp/components/EmailVerificaionForm';
+import PhoneVerificaionForm from '../authentication/signUp/components/PhoneVerificationForm'
 
 //agreement 는 이용약관
 function CommonForm({agreement}, type) {
 
   const router = useRouter();
 
-  const {
-    phone,
-    otp,
-    phoneVerified,
-    otpSended,
-    handlePhoneChange,
-    handleOtpChange,
-    sendOtp,
-    verifyOtp
-  } = usePhoneVerification();
+    const phoneVerificaion = usePhoneVerification();
+
     // 이메일 커스텀 훅
     const emailVerificaion = useEmailVerification();
   
@@ -276,7 +269,7 @@ function CommonForm({agreement}, type) {
                   
                   </Grid>
                 
-                </Box>      
+                </Box>
               </Box>
             )}
           </Box>
@@ -304,6 +297,7 @@ function CommonForm({agreement}, type) {
               <InputForm
                 label="아이디"
                 name="id"
+                required={true}
                 value={id}
                 onChange={handleIdChange}
               />
@@ -344,58 +338,20 @@ function CommonForm({agreement}, type) {
             }}
             className="bg-black"
           >
+
             <Grid container alignItems="center" spacing={2}>
               <InputForm
                 label="이름" 
                 name="username"
+                required={true}
                 value={username}
                 onChange={handleUsernameChange}
               />
-              <InputForm
-                label="휴대폰번호"
-                name="phone"
-                value={phone}
-                onChange={handlePhoneChange}
-                xs={12}
-                disabled={phoneVerified}
-              />
-              <Button
-                xs={4}
-                variant="outlined"
-                color="primary"
-                fullWidth
-                onClick={sendOtp}
-                disabled={phoneVerified}
-                sx={{
-                  ml:'16px'
-                }}
-              >
-                휴대폰 인증하기
-              </Button> 
-              <InputForm
-                label="인증번호"
-                name="otp"
-                value={otp}
-                onChange={handleOtpChange}
-                //otp 발송 전과 인증 후에 disabled
-                disabled={!otpSended || phoneVerified}
-                xs={12}
-              />
-              <Button
-                xs={4}
-                variant="outlined"
-                color="primary"
-                fullWidth
-                disabled={!otpSended || phoneVerified}
-                onClick={verifyOtp}
-                sx={{
-                  ml:'16px'
-                }}
-              >
-                확인
-              </Button>
             </Grid>
           </Box>
+          {/* 핸드폰 번호 인증 폼 */}
+          <PhoneVerificaionForm {...phoneVerificaion}/>
+          {/* 이메일 폼 */}
           <EmailVerificationForm {...emailVerificaion}/>
 
           <Box
@@ -403,6 +359,7 @@ function CommonForm({agreement}, type) {
               background: "#fff",
               padding: "30px 20px",
               borderRadius: "10px",
+              mt:"20px",
               mb: "20px",
             }}
             className="bg-black"

@@ -230,8 +230,8 @@ function InquiryModal({ open, onClose }) {
           rows={4}
         />
         <div style={{ margin: '20px 0' }}>
-          <Button variant="contained" component="label" startIcon={<AttachFileIcon />}>
-            파일 첨부
+          <Button variant="contained" component="label" startIcon={<AttachFileIcon />}  >
+            Upload files
             <input type="file" hidden onChange={handleFileChange} />
           </Button>
           {formData.file && (

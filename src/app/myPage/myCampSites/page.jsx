@@ -1,14 +1,3 @@
-// import React from 'react';
-
-// function page(props) {
-//   return (
-//     <div>
-      
-//     </div>
-//   );
-// }
-
-// export default page;
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -182,9 +171,7 @@ function CampgroundSearchPage() {
                 )}
                 <div className="camping-item-text">
                   <Box 
-                    sx={{
-                      display: 'flex'
-                    }}
+                    sx={{display: 'flex'}}
                   >
                     <Typography
                       style={{

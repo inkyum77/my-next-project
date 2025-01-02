@@ -11,7 +11,6 @@ function useApi(token, setData) {
             const response = await axios.get(API_URL, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
                 },
                 params, // 쿼리 파라미터 추가
             });
@@ -32,24 +31,23 @@ function useApi(token, setData) {
     }, [LOCAL_API_BASE_URL, token, setData]);
 
     // POST 요청 함수
-    const postData = useCallback(async (url, body = {}, params = {}, onSuccess = () => {}, onError = () => {}) => {
+    const postData = useCallback(async (url, params = {}, onSuccess = () => {}, onError = () => {}) => {
         const API_URL = `${LOCAL_API_BASE_URL}${url}`;
         try {
-            const response = await axios.post(API_URL, body, {
+            const response = await axios.post(API_URL, params, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
                 },
-                params, // 쿼리 파라미터 추가
             });
 
-            if (response.data.success) {
+            console.log(response.data.success);
+            if (response.data.success == true) {
                 setData(response.data.data);
                 console.log(response.data.data);
+                // 성공했을 때 실행할 함수 (onSuccess)
+                onSuccess(); // 여기서 전달된 콜백 실행
             }
 
-            // 성공했을 때 실행할 함수 (onSuccess)
-            onSuccess(response.data); // 여기서 전달된 콜백 실행
         } catch (error) {
             console.error('Error posting data:', error);
 

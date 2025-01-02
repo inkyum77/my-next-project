@@ -53,6 +53,7 @@ function page(props) {
         }
       } else{
         alert("비밀번호가 틀립니다.")
+        setPassword("");
       }
     } catch (error) {
     }
@@ -99,6 +100,7 @@ function page(props) {
         label="비밀번호"
         type="password" // 보이는 상태에 따라 입력 타입 변경
         name="password"
+        autoFocus = "true"
         value={password}
         onChange={handlePasswordChange}
         onKeyDown={handleKeyDown}
