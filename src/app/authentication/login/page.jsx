@@ -1,6 +1,4 @@
 "use client"
-
-
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
@@ -31,6 +29,11 @@ const SignInForm = () => {
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const logout = useAuthStore((state) => state.logout);
+  const [rememberMe, setRememberMe] = useState(false);
+  
+  useEffect(() => {
+    console.log(rememberMe);
+  }, [rememberMe])  
 
   // 텍스트필드 초기화
   const initMvo = {
@@ -45,6 +48,18 @@ const SignInForm = () => {
 
   //사용자 정보
   const [mvo, setMvo] = useState(initMvo);
+
+  useEffect(() => {
+    // "아이디 저장"이 체크되어 있을 경우, localStorage에서 아이디를 가져와서 입력란에 채웁니다.
+    const savedId = localStorage.getItem('id');
+    if (savedId) {
+      setMvo({
+        id:savedId,
+        password: ""
+      });
+      setRememberMe(true);
+    }
+  }, []);
 
   // 로그인 처리
   // 서버에서 sendRedirect로 넘어오는 값을 받아서 로그인 처리
@@ -62,6 +77,7 @@ const SignInForm = () => {
         router.push("/");
     }
   }, [login, router])
+  
 
   function changeMvo(e) {
     const { name, value } = e.target;
@@ -71,6 +87,13 @@ const SignInForm = () => {
   }
 
   function goServer() {
+    if (rememberMe) {
+      // "아이디 저장"이 체크되어 있다면 localStorage에 아이디를 저장합니다.
+      localStorage.setItem('id', mvo.id);
+    } else {
+      // "아이디 저장"이 체크되지 않았다면 localStorage에서 아이디를 삭제합니다.
+      localStorage.removeItem('id');
+    }
     const searchParams = new URLSearchParams(window.location.search);
     // 어떤 경로로 로그인 페이지에 왔는가?
     let from = searchParams.get('from');
@@ -97,20 +120,6 @@ const SignInForm = () => {
       }
     });
   }
-  
-  // 회원가입 페이지로 이동
-  const handleSignup = () => {
-    router.push("/signUp");  // 회원가입 페이지로 이동
-  };
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get("email"),
-  //     password: data.get("password"),
-  //   });
-  // };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -195,7 +204,7 @@ const SignInForm = () => {
                 <Grid item xs={6} sm={6}>
                   <FormControlLabel
                     control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
+                      <Checkbox checked={rememberMe} color="primary" onChange={(e) => setRememberMe(e.target.checked)}/>
                     }
                     label="Remember me."
                   />

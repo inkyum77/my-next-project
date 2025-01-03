@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import AgreementForm from './AgreementForm';
 import EmailVerificationForm from '../authentication/signUp/components/EmailVerificaionForm';
 import PhoneVerificaionForm from '../authentication/signUp/components/PhoneVerificationForm'
+import axios from 'axios';
 
 //agreement 는 이용약관
 function CommonForm({agreement}, type) {
@@ -71,6 +72,7 @@ function CommonForm({agreement}, type) {
         }
         if(!validated){
           alert('사업자 인증을 완료해주세요.');
+          return;
         }
       }
   
@@ -85,19 +87,20 @@ function CommonForm({agreement}, type) {
         alert("비밀번호가 일치하지 않습니다.");
         return;
       }
-      if (!emailVerified) {
+      if (!emailVerificaion.emailVerified) {
         alert("이메일 인증을 완료해주세요.");
         return;
       }
       if (!agreed) {
         alert("약관에 동의해주세요." + agreed);
+      }
 
         const userData = {
             id: id,
             username: username,
             password: password,
-            email: email,
-            phone: phone,
+            email: emailVerificaion.email,
+            phone: phoneVerificaion.phone,
             zipcode: zipcode,
             address: address,
             address_detail: addressDetail,
@@ -106,44 +109,7 @@ function CommonForm({agreement}, type) {
             started_date: startedDate,
             type : userType
         };
-    
-    
-        try {
-          const response = await api.post('/api/users/join', userData, {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-          console.log(response);
-          if(response.data.success){
-            console.log(response.data);
-            router.push('/');
-          }
-        } catch (error) {
-          alert('회원가입 실패' + error);
-        }
-
-        return;
-      }
-
-      console.log(password);
-  
-      
-        const userData = {
-          id: id,
-          username,
-          password: password,
-          email: email,
-          phone: phone,
-          zipcode: zipcode,
-          address: address,
-          address_detail: addressDetail,
-          business_number: businessNumber,
-          business_ceo: ceoName,
-          started_date: startedDate,
-          type: userType
-      };
-  
+      console.log(userData);
   
       try {
         const response = await api.post('/api/users/join', userData, {
@@ -166,7 +132,7 @@ function CommonForm({agreement}, type) {
 
   return (
     <Box
-        component="main"  
+        component="main"
         sx={{
           maxWidth: "510px",
           ml: "auto",

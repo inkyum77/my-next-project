@@ -78,14 +78,14 @@ function MyUserInfo(props) {
   //   }
   // }
 
-    // 이미지 선택 후 미리보기
-    const handleImageChange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        setImage(file);
-        setPreview(URL.createObjectURL(file)); // 미리보기 URL 생성
-      }
-    };
+  // 이미지 선택 후 미리보기
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); // 미리보기 URL 생성
+    }
+  };
 
   useEffect(() => {
     if (token) {
@@ -159,8 +159,10 @@ function MyUserInfo(props) {
         <DialogContent>
           <input type="file" accept="image/*" onChange={handleImageChange} />
           {preview && (
-            <div style={{ marginTop: 10 }}>
-              <img src={preview} alt="Preview" style={{ width: 150, height: 150, objectFit: "cover" }} />
+            <div style={{ marginTop: 10, alignItems:"center" }}>
+              <Avatar src={preview} alt="Preview" style={{ width: 150, height: 150, objectFit: "cover" }}>
+
+              </Avatar>
             </div>
           )}
         </DialogContent>
